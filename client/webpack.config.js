@@ -1,5 +1,9 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const { resolve } = require("path");
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+const { resolve } = require('path')
+
+// Configuramos la url del api
+const api_url = process.env.API_URL || 'http://localhost:3000'
 
 /**
  * Configuración para compilar el cliente de la práctica final
@@ -8,18 +12,18 @@ module.exports = {
   // Para simplificar, asignamos el contexto a la carpeta actual
   context: resolve(__dirname),
   // Punto de entrada de la aplicación
-  entry: "./index.js",
+  entry: './index.js',
   output: {
     // Guardamos la aplicación en esta carpeta. En este caso, el path
     // tiene que ser absoluto
-    path: resolve(__dirname, "./dist"),
+    path: resolve(__dirname, './dist'),
     // Fuerza a que los distintos ficheros se sirvan partiendo del directorio raiz /.
     // Si no se fuerza este comportamiento, al utilizar react-router y definir rutas,
     // webpack utilizara URLs relativas como /mi-ruta/main.js causando errores.
-    publicPath: "/",
+    publicPath: '/',
     // Modificamos la funcion para generar los hashes y evitar errores en versiones
     // de Node superiores a la 17
-    hashFunction: "xxhash64"
+    hashFunction: 'xxhash64',
   },
   module: {
     // Definimos los distintos modulos de transpilacion disponibles
@@ -29,13 +33,13 @@ module.exports = {
         test: /\.js$/,
         exclude: [/node_modules/],
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       // Cargamos los estilos de CSS
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -43,14 +47,18 @@ module.exports = {
   plugins: [
     // Utilizamos una plantilla HTML para todos los ejemplos por defecto
     new HtmlWebPackPlugin({
-      template: "./template/index.html",
-      favicon: "./static/favicon.ico",
-      filename: "index.html",
+      template: './template/index.html',
+      favicon: './static/favicon.ico',
+      filename: 'index.html',
+    }),
+    new webpack.DefinePlugin({
+      API_URL: JSON.stringify(api_url),
     }),
   ],
   // Por ahora, incluimos siempre los source maps para que las herramientas
   // de desarrollo del navegador muestren el codigo fuente
-  devtool: "eval-cheap-module-source-map",
+  // Cambiamos la configuración de eval-cheap-module-source-map a source-map
+  devtool: 'source-map',
   // Configuracion del servidor de desarrollo
   devServer: {
     // Forzamos a que cualquier ruta que sea la de un fichero conocido por
@@ -64,7 +72,7 @@ module.exports = {
     open: true,
     // Añadimos el proxy para los ejemplos 6.2
     proxy: {
-      "/api": "http://localhost:3000",
+      '/api': api_url,
     },
   },
-};
+}
