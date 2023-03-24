@@ -15,6 +15,7 @@ import NotesRouter from './pages/notes/NotesRouter'
 import { useSelector, useDispatch } from 'react-redux'
 // Reducers
 import { update } from './reducers/userSlice'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} })
 
@@ -65,21 +66,23 @@ const App = () => {
             </Typography>
           </Link>
           <UserSession.Provider value={{ token, setToken }}>
-            {/* Definimos las rutas de la aplicación */}
-            <Router>
-              <Route path='/' exact>
-                <Home />
-              </Route>
-              <Route path='/users/login'>
-                <Login />
-              </Route>
-              <Route path='/users/register'>
-                <UserRegister />
-              </Route>
-              <Route path='/notes'>
-                <NotesRouter />
-              </Route>
-            </Router>
+            <ErrorBoundary>
+              {/* Definimos las rutas de la aplicación */}
+              <Router>
+                <Route path='/' exact>
+                  <Home />
+                </Route>
+                <Route path='/users/login'>
+                  <Login />
+                </Route>
+                <Route path='/users/register'>
+                  <UserRegister />
+                </Route>
+                <Route path='/notes'>
+                  <NotesRouter />
+                </Route>
+              </Router>
+            </ErrorBoundary>
           </UserSession.Provider>
         </main>
       </ThemeProvider>
