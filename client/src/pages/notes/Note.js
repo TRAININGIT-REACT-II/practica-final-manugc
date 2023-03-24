@@ -16,7 +16,7 @@ const Note = () => {
     title: '',
     content: '',
   })
-  const { title, content, author } = formState
+  const { title, content } = formState
 
   const onSubmit = async (evt) => {
     evt.preventDefault()
@@ -71,7 +71,7 @@ const Note = () => {
                 onChange={onChange}
                 error={errorMensaje !== ''}
                 inputProps={{
-                  'aria-label': 'tittle',
+                  'aria-label': 'title',
                 }}
               />
               <TextField
